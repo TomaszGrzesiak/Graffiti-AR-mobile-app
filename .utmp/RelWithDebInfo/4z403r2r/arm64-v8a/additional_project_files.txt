@@ -1,0 +1,17 @@
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\GAToUnityCallbacks.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\MacroEnd.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\MacroHeaderBegin.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\MacroSourceBegin.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAApplication.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAConfiguration.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGADebug.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAEvents.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAInput.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGASoftKeyboard.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGASoftKeyboardCallbacks.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGATypes.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UGAVersion.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGACallbacks.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAConfigurationCallbacks.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAKeyEventCallbacks.h
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\UnityToGAMotionEventCallbacks.h

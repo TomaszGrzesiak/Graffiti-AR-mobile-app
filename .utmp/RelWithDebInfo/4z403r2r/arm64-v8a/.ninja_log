@@ -1,0 +1,10 @@
+# ninja log v5
+241	5268	7523515061650639	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	86288f7f0cf0c03d
+320	5450	7523515065011160	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	83c26441b97addc5
+1	5523	7523515066261156	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	94434ca058664747
+465	5525	7523515067011150	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	ee0be3318fe93c2a
+56	5571	7523515068191153	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	144d97ffc92cb29d
+530	6186	7523515069251611	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	1d46ae7d335b34b4
+106	7055	7523515081477308	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	a470b7b5b2e1fe4
+27	7162	7523515083006167	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	2a0abf0355bef784
+7163	7830	7523515091278143	C:/XRD1/Graffiti/Graffiti-AR-mobile-app/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/4z403r2r/obj/arm64-v8a/libgame.so	f113260c8fa6a75d

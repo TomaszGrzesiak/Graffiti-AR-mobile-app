@@ -1,0 +1,2 @@
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\XRD1\Graffiti\Graffiti-AR-mobile-app\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt
