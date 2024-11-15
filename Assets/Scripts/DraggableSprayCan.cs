@@ -1,65 +1,65 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-public class DraggableSprayCan : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class DraggableSprayCan : MonoBehaviour
 {
-    private RectTransform rectTransform;
-    private Canvas canvas;
-    private Quaternion originalRotation;
-    private Vector2 offset;
+    public GameObject sprayCanImage; // Assign the spray can image (child of Canvas) in the inspector
 
-    private void Awake()
+    private InputAction touchPressAction;
+    private InputAction touchPositionAction;
+
+    void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-        canvas = GetComponentInParent<Canvas>();
+        // Setup input actions
+        touchPressAction = new InputAction(type: InputActionType.PassThrough, binding: "<Touchscreen>/press");
+        touchPositionAction = new InputAction(type: InputActionType.PassThrough, binding: "<Touchscreen>/primaryTouch/position");
 
-        if (canvas == null)
-        {
-            Debug.LogError("The image must be a child of a canvas.");
+        // Enable input actions
+        touchPressAction.Enable();
+        touchPositionAction.Enable();
+    }
+
+    void Update()
+    {
+    // Check if the screen is being touched
+    bool isTouching = touchPressAction.ReadValue<float>() > 0;
+
+    if (isTouching)
+    {
+        // Make the spray can image visible
+        sprayCanImage.SetActive(true);
+
+        // Get the touch position
+        Vector2 touchPosition = touchPositionAction.ReadValue<Vector2>();
+
+        // Convert the touch position to the canvas space
+        RectTransform canvasRect = sprayCanImage.transform.parent as RectTransform;
+        RectTransform sprayRect = sprayCanImage.GetComponent<RectTransform>();
+
+        Vector2 canvasPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            touchPosition,
+            null,
+            out canvasPos);
+
+            // Apply an offset so the touch position is at the top of the image
+            Vector2 offset = new Vector2(0, -sprayRect.rect.height / 3);
+            sprayRect.anchoredPosition = canvasPos + (offset*2);
         }
-
-        originalRotation = rectTransform.rotation;
+        else
+        {
+            // Hide the spray can image when not touching
+            sprayCanImage.SetActive(false);
+        }
     }
 
-    // Called when pointer/touch is down on the image
-    public void OnPointerDown(PointerEventData eventData)
+
+    private void OnDestroy()
     {
-        // Rotate the image by 20 degrees
-        rectTransform.Rotate(0, 0, 20f);
-
-        // Calculate offset so the image follows the top center
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out Vector2 localPointerPosition);
-
-        // Calculate the offset from the center of the top edge
-        Vector2 imageCenterTopEdge = new Vector2(0, rectTransform.rect.height / 2);
-        offset = localPointerPosition - imageCenterTopEdge;
-    }
-
-    // Called when the image is dragged
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (canvas == null)
-            return;
-
-        Vector2 pointerPosition;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            canvas.transform as RectTransform,
-            eventData.position,
-            eventData.pressEventCamera,
-            out pointerPosition);
-
-        // Adjust position based on offset
-        rectTransform.anchoredPosition = pointerPosition - offset;
-    }
-
-    // Called when the pointer/touch is released
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        // Rotate the image back to the original rotation
-        rectTransform.rotation = originalRotation;
+        // Disable input actions
+        touchPressAction.Disable();
+        touchPositionAction.Disable();
     }
 }

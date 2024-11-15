@@ -7,25 +7,28 @@ using UnityEngine.XR.ARSubsystems;
 public class ARGraffiti : MonoBehaviour
 {
     private AudioSource spraySound;
-    private InputAction touchAction;
+    private InputAction touchPressAction;
+    private InputAction touchPositionAction;
     private InputAction keyAction;
     private bool isTouchingOrKeyHeld = false;
 
-    public Camera arCamera;                  // Reference to the AR camera
-    public GameObject paintPrefab;           // Prefab containing the LineRenderer
-    public ARRaycastManager arRaycastManager; // Reference to AR Raycast Manager
-    private List<ARRaycastHit> hits = new List<ARRaycastHit>(); // List to store raycast hits
-    private LineRenderer currentLineRenderer; // Current LineRenderer instance
-    private List<Vector3> points = new List<Vector3>(); // Points for the line
+    public Camera arCamera;
+    public GameObject paintPrefab;
+    public ARRaycastManager arRaycastManager;
+    private List<ARRaycastHit> hits = new List<ARRaycastHit>();
+    private LineRenderer currentLineRenderer;
+    private List<Vector3> points = new List<Vector3>();
 
     void Awake()
     {
         // Initialize actions
-        touchAction = new InputAction(type: InputActionType.PassThrough, binding: "<Touchscreen>/press");
+        touchPressAction = new InputAction(type: InputActionType.PassThrough, binding: "<Touchscreen>/press");
+        touchPositionAction = new InputAction(type: InputActionType.PassThrough, binding: "<Touchscreen>/primaryTouch/position");
         keyAction = new InputAction(type: InputActionType.PassThrough, binding: "<Keyboard>/t");
 
         // Enable actions
-        touchAction.Enable();
+        touchPressAction.Enable();
+        touchPositionAction.Enable();
         keyAction.Enable();
     }
 
@@ -36,26 +39,24 @@ public class ARGraffiti : MonoBehaviour
 
     private void Update()
     {
-        bool isTouching = touchAction.ReadValue<float>() > 0;
+        bool isTouching = touchPressAction.ReadValue<float>() > 0;
         bool isKeyPressed = keyAction.ReadValue<float>() > 0;
 
-        // If touch or key is held, start painting and sound
         if (isTouching || isKeyPressed)
         {
-            // Play sound if it’s not already playing
             if (!isTouchingOrKeyHeld)
             {
                 spraySound.Play();
                 isTouchingOrKeyHeld = true;
             }
 
-            // Raycast from the camera to detect surfaces
-            Ray ray = arCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            Vector2 touchPosition = isTouching ? touchPositionAction.ReadValue<Vector2>() : new Vector2(Screen.width / 2, Screen.height / 2);
+            Ray ray = arCamera.ScreenPointToRay(touchPosition);
+
             if (arRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
             {
                 Pose hitPose = hits[0].pose;
 
-                // Start a new line if needed
                 if (currentLineRenderer == null)
                 {
                     GameObject newLine = Instantiate(paintPrefab, hitPose.position, Quaternion.identity);
@@ -63,7 +64,6 @@ public class ARGraffiti : MonoBehaviour
                     points.Clear();
                 }
 
-                // Add a new point to the line
                 AddPoint(hitPose.position);
             }
         }
@@ -71,11 +71,10 @@ public class ARGraffiti : MonoBehaviour
         {
             spraySound.Stop();
             isTouchingOrKeyHeld = false;
-            currentLineRenderer = null; // Reset the line
+            currentLineRenderer = null;
         }
     }
 
-    // Add a point to the LineRenderer
     private void AddPoint(Vector3 point)
     {
         points.Add(point);
@@ -85,8 +84,8 @@ public class ARGraffiti : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Disable actions
-        touchAction.Disable();
+        touchPressAction.Disable();
+        touchPositionAction.Disable();
         keyAction.Disable();
     }
 }
