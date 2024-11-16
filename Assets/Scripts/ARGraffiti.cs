@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MobileARTemplateAssets.Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
@@ -14,19 +15,19 @@ public class ARGraffiti : MonoBehaviour
 
     public Camera arCamera;
     public GameObject paintPrefab;
+    public ParticleSystem sprayParticles; // Particle system to simulate spray paint
     public ARRaycastManager arRaycastManager;
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
-    private LineRenderer currentLineRenderer;
-    private List<Vector3> points = new List<Vector3>();
+
+    // Reference to the ColourPicker script
+    public ColourPicker colorPicker;
 
     void Awake()
     {
-        // Initialize actions
         touchPressAction = new InputAction(type: InputActionType.PassThrough, binding: "<Touchscreen>/press");
         touchPositionAction = new InputAction(type: InputActionType.PassThrough, binding: "<Touchscreen>/primaryTouch/position");
         keyAction = new InputAction(type: InputActionType.PassThrough, binding: "<Keyboard>/t");
 
-        // Enable actions
         touchPressAction.Enable();
         touchPositionAction.Enable();
         keyAction.Enable();
@@ -35,6 +36,12 @@ public class ARGraffiti : MonoBehaviour
     void Start()
     {
         spraySound = GetComponent<AudioSource>();
+
+        if (sprayParticles != null)
+        {
+            var emission = sprayParticles.emission;
+            emission.enabled = false;
+        }
     }
 
     private void Update()
@@ -48,6 +55,9 @@ public class ARGraffiti : MonoBehaviour
             {
                 spraySound.Play();
                 isTouchingOrKeyHeld = true;
+
+                var emission = sprayParticles.emission;
+                emission.enabled = true;
             }
 
             Vector2 touchPosition = isTouching ? touchPositionAction.ReadValue<Vector2>() : new Vector2(Screen.width / 2, Screen.height / 2);
@@ -56,30 +66,16 @@ public class ARGraffiti : MonoBehaviour
             if (arRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
             {
                 Pose hitPose = hits[0].pose;
-
-                if (currentLineRenderer == null)
-                {
-                    GameObject newLine = Instantiate(paintPrefab, hitPose.position, Quaternion.identity);
-                    currentLineRenderer = newLine.GetComponent<LineRenderer>();
-                    points.Clear();
-                }
-
-                AddPoint(hitPose.position);
             }
         }
         else if (!isTouching && !isKeyPressed && isTouchingOrKeyHeld)
         {
             spraySound.Stop();
             isTouchingOrKeyHeld = false;
-            currentLineRenderer = null;
-        }
-    }
 
-    private void AddPoint(Vector3 point)
-    {
-        points.Add(point);
-        currentLineRenderer.positionCount = points.Count;
-        currentLineRenderer.SetPositions(points.ToArray());
+            var emission = sprayParticles.emission;
+            emission.enabled = false;
+        }
     }
 
     private void OnDestroy()
@@ -87,5 +83,29 @@ public class ARGraffiti : MonoBehaviour
         touchPressAction.Disable();
         touchPositionAction.Disable();
         keyAction.Disable();
+    }
+
+    void OnParticleCollision(GameObject other)
+    {
+        List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
+        int numCollisionEvents = sprayParticles.GetCollisionEvents(other, collisionEvents);
+
+        for (int i = 0; i < numCollisionEvents; i++)
+        {
+            Vector3 collisionPoint = collisionEvents[i].intersection;
+            Vector3 collisionNormal = collisionEvents[i].normal;
+
+            Quaternion rotation = Quaternion.LookRotation(collisionNormal, Vector3.up) * Quaternion.Euler(90, 0, 0);
+
+            // Instantiate the paint prefab and set its color from the ColourPicker
+            GameObject paintInstance = Instantiate(paintPrefab, collisionPoint, rotation);
+            Renderer paintRenderer = paintInstance.GetComponent<Renderer>();
+
+            if (paintRenderer != null)
+            {
+                Color sprayColor = Color.HSVToRGB(colorPicker.currentHue, colorPicker.currentSat, colorPicker.currentValue);
+                paintRenderer.material.color = sprayColor;
+            }
+        }
     }
 }

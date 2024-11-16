@@ -1245,7 +1245,7 @@ MonoBehaviour:
   currentHue: 0
   currentSat: 0
   currentValue: 0
-  hueImgae: {fileID: 1850561829}
+  hueImage: {fileID: 1850561829}
   satValueImage: {fileID: 126333098}
   outputImage: {fileID: 449945391}
   hueSlider: {fileID: 2028113357}
