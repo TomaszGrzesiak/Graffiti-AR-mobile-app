@@ -66,6 +66,10 @@ public class ARGraffiti : MonoBehaviour
             if (arRaycastManager.Raycast(ray, hits, TrackableType.PlaneWithinPolygon))
             {
                 Pose hitPose = hits[0].pose;
+
+                // Position the particle system at the raycast hit point
+                sprayParticles.transform.position = hitPose.position + hitPose.up * 0.1f; // Move 0.1 units back
+                sprayParticles.transform.rotation = Quaternion.LookRotation(-hitPose.up, hitPose.forward);
             }
         }
         else if (!isTouching && !isKeyPressed && isTouchingOrKeyHeld)
