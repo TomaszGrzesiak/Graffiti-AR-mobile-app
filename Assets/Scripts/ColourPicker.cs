@@ -8,23 +8,19 @@ namespace MobileARTemplateAssets.Scripts
     public class ColourPicker : MonoBehaviour
     {
         public float currentHue, currentSat, currentValue;
-        [SerializeField]
-        private  RawImage hueImgae, satValueImage, outputImage;
-        [SerializeField]
-        private Slider hueSlider;
-        [SerializeField]
-        private TMP_InputField hexInputField;
+        [SerializeField] private RawImage hueImage, satValueImage, outputImage;
+        [SerializeField] private Slider hueSlider;
+        [SerializeField] private TMP_InputField hexInputField;
         private Texture2D hueTexture, svTexture, outputTexture;
-        [SerializeField]
-        MeshRenderer changeThisColour;
-    
+
         private void Start()
         {
             CreateHueImage();
             CreateSVImage();
             CreateOutputImage();
-            UpdateOutputImgae();
+            UpdateOutputImage();
         }
+
         private void CreateHueImage()
         {
             hueTexture = new Texture2D(1, 16);
@@ -33,13 +29,13 @@ namespace MobileARTemplateAssets.Scripts
 
             for (int i = 0; i < hueTexture.height; i++)
             {
-                hueTexture.SetPixel(0, i, Color.HSVToRGB((float)i / hueTexture.height, 1, 0.05f));
+                hueTexture.SetPixel(0, i, Color.HSVToRGB((float)i / hueTexture.height, 1, 0.9f));
             }
-        
+
             hueTexture.Apply();
             currentHue = 0;
 
-            hueImgae.texture = hueTexture;
+            hueImage.texture = hueTexture;
         }
 
         private void CreateSVImage()
@@ -54,13 +50,12 @@ namespace MobileARTemplateAssets.Scripts
                 {
                     svTexture.SetPixel(x, y, Color.HSVToRGB(currentHue, (float)x / svTexture.width, (float)y / svTexture.height));
                 }
-            
             }
-        
+
             svTexture.Apply();
             currentSat = 0;
             currentValue = 0;
-        
+
             satValueImage.texture = svTexture;
         }
 
@@ -69,37 +64,39 @@ namespace MobileARTemplateAssets.Scripts
             outputTexture = new Texture2D(1, 16);
             outputTexture.wrapMode = TextureWrapMode.Clamp;
             outputTexture.name = "OutputTexture";
-        
+
             Color currentColor = Color.HSVToRGB(currentHue, currentSat, currentValue);
 
             for (int i = 0; i < outputTexture.height; i++)
             {
                 outputTexture.SetPixel(0, i, currentColor);
             }
-        
+
             outputTexture.Apply();
             outputImage.texture = outputTexture;
         }
 
-        private void UpdateOutputImgae()
+        private void UpdateOutputImage()
         {
             Color currentColor = Color.HSVToRGB(currentHue, currentSat, currentValue);
 
+            // Apply the color to all pixels of the texture
             for (int i = 0; i < outputTexture.height; i++)
             {
                 outputTexture.SetPixel(0, i, currentColor);
             }
-        
+
             outputTexture.Apply();
-            changeThisColour.GetComponent<MeshRenderer>().material.color = currentColor;
+            outputImage.texture = outputTexture;  // Make sure the texture is applied to the RawImage
         }
+
 
         public void SetSV(float S, float V)
         {
             currentSat = S;
             currentValue = V;
-        
-            UpdateOutputImgae();
+
+            UpdateOutputImage();
         }
 
         public void UpdateSVImage()
@@ -110,12 +107,12 @@ namespace MobileARTemplateAssets.Scripts
             {
                 for (int x = 0; x < svTexture.width; x++)
                 {
-                    svTexture.SetPixel(x, i, Color.HSVToRGB(currentHue, (float)x/svTexture.width, (float)i/svTexture.height));
+                    svTexture.SetPixel(x, i, Color.HSVToRGB(currentHue, (float)x / svTexture.width, (float)i / svTexture.height));
                 }
             }
-        
+
             svTexture.Apply();
-            UpdateOutputImgae();
+            UpdateOutputImage();
         }
     }
 }
