@@ -78,3 +78,6 @@ crashlytics-build.properties
 #vscode
 *.vscode
 *.vsconfig
+
+#other
+.utmp/
