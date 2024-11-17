@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MobileARTemplateAssets.Scripts;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.ARFoundation;
@@ -17,6 +18,8 @@ public class ARGraffiti : MonoBehaviour
     public GameObject paintPrefab;
     public ParticleSystem sprayParticles; // Particle system to simulate spray paint
     public ARRaycastManager arRaycastManager;
+    public TextMeshProUGUI Thickness; // Slider text indicating thickness
+    public GameObject CheckMenu;
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
     // Reference to the ColourPicker script
@@ -46,6 +49,20 @@ public class ARGraffiti : MonoBehaviour
 
     private void Update()
     {
+        // Check if CheckMenu is active, and if so, stop the spray functionality
+        if (CheckMenu.activeSelf)
+        {
+            if (isTouchingOrKeyHeld)
+            {
+                spraySound.Stop();
+                isTouchingOrKeyHeld = false;
+
+                var emission = sprayParticles.emission;
+                emission.enabled = false;
+            }
+            return;
+        }
+
         bool isTouching = touchPressAction.ReadValue<float>() > 0;
         bool isKeyPressed = keyAction.ReadValue<float>() > 0;
 
@@ -82,6 +99,7 @@ public class ARGraffiti : MonoBehaviour
         }
     }
 
+
     private void OnDestroy()
     {
         touchPressAction.Disable();
@@ -110,6 +128,10 @@ public class ARGraffiti : MonoBehaviour
                 Color sprayColor = Color.HSVToRGB(colorPicker.currentHue, colorPicker.currentSat, colorPicker.currentValue);
                 paintRenderer.material.color = sprayColor;
             }
+
+            // Adjust the size of the paintPrefab based on Thickness
+            float thicknessValue = Mathf.Clamp(float.Parse(Thickness.text), 0.1f, 1f); // Ensure a valid range
+            paintInstance.transform.localScale = new Vector3(thicknessValue / 20, thicknessValue / 20, thicknessValue / 20);
         }
     }
 }
